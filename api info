@@ -21,3 +21,39 @@ functions:
   delete: notes-api-prod-delete
 layers:
   None
+
+cognito
+Pool Id us-east-1_6QS3zvR9R
+Pool ARN arn:aws:cognito-idp:us-east-1:692067494864:userpool/us-east-1_6QS3zvR9R
+
+
+App client id
+1nddbltfk1laco4t7cun2d2ucr
+
+
+$ aws cognito-idp admin-confirm-sign-up \
+  --region us-east-1 \
+  --user-pool-id us-east-1_6QS3zvR9R \
+  --username admin@example.com
+
+
+
+// Initialize the Amazon Cognito credentials provider
+CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+    getApplicationContext(),
+    "us-east-1:88bc4622-bc51-49c7-b8da-539a75daec51", // Identity pool ID
+    Regions.US_EAST_1 // Region
+);  
+
+npx aws-api-gateway-cli-test \
+--username='admin@example.com' \
+--password='Passw0rd!' \
+--user-pool-id='us-east-1_6QS3zvR9R' \
+--app-client-id='1nddbltfk1laco4t7cun2d2ucr' \
+--cognito-region='us-east-1' \
+--identity-pool-id='us-east-1:88bc4622-bc51-49c7-b8da-539a75daec51' \
+--invoke-url='https://2ovmur4heg.execute-api.us-east-1.amazonaws.com/prod' \
+--api-gateway-region='us-east-1' \
+--path-template='/notes' \
+--method='POST' \
+--body='{"content":"hello world","attachment":"hello.jpg"}'
